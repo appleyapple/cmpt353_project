@@ -6,7 +6,7 @@ import statsmodels.api as sm
 from pykalman import KalmanFilter
 
 
-data = pd.read_csv('data/left_leg_m.csv', header=0, names=['time', 'x', 'y', 'z', 't'])
+data = pd.read_csv('../data/left_leg_standard.csv', header=0, names=['time', 'x', 'y', 'z', 't'])
 data = data.drop(columns=['t'])
 print(data)
 
