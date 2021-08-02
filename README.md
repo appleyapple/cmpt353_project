@@ -30,9 +30,10 @@ z: leg moving side to side
 
 -plots: 
 
-    -raw data (before/after smoothing)
+..* raw data (before/after smoothing)
 
-    -velocity
+..* velocity vs time
 
-    -position
-    
+..* position vs time
+
+..* graph of foot movement? (side view, top view, front view)
