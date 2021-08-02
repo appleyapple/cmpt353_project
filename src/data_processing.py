@@ -6,16 +6,21 @@ import statsmodels.api as sm
 from pykalman import KalmanFilter
 
 
-data = pd.read_csv('../data/left_leg_standard.csv', header=0, names=['time', 'x', 'y', 'z', 't'])
-data = data.drop(columns=['t'])
-print(data)
+def load_data(csv):
+    data = pd.read_csv('data/'+csv, header=0, names=['time', 'x', 'y', 'z', 't'])
+    data = data.drop(columns=['t'])
+    return data
+
+# data loading
+left_standard = load_data('left_leg_standard.csv')
+right_standard = load_data('right_leg_standard.csv')
 
 # loess smoothing
 lowess = sm.nonparametric.lowess
-loess_smoothed = lowess(data['x'], data['time'], frac=0.001)
+left_standard_loess = lowess(left_standard['x'], left_standard['time'], frac=0.001)
 
 # kalman data filtering
-kalman_data = data[['x', 'y', 'z']]
+kalman_data = left_standard[['x', 'y', 'z']]
 initial_state = kalman_data.iloc[0]
 observation_covariance = np.diag([0.98, 0.88, 0.83]) ** 2 
 transition_covariance = np.diag([0.005, 0.01, 0.01]) ** 2
@@ -28,11 +33,11 @@ kf = KalmanFilter(
     observation_covariance=observation_covariance,
     initial_state_mean=initial_state
 )
-kalman_smoothed, covariances= kf.smooth(kalman_data)
+left_standard_kalman, covariances= kf.smooth(kalman_data)
 
-plt.plot(data['time'], data['x'])
-# plt.plot(data['time'], loess_smoothed[:,1])
-plt.plot(data['time'], kalman_smoothed[:,0])
+plt.plot(left_standard['time'], left_standard['x'])
+plt.plot(left_standard['time'], left_standard_loess[:,1])
+# plt.plot(left_standard['time'], left_standard_kalman[:,0])
 # plt.plot(data['time'], data['y'])
 # plt.plot(data['time'], data['z'])
 plt.show()
