@@ -3,12 +3,20 @@ If you compare right-foot vs left-foot, can you determine if someone's gait is a
 
 ## Run code
 ### Required libraries:
+scipy, pandas, numpy, matplotlib, statsmodels
 
 ### Command execution:
 #### Run whole thing
 `> python main.py`
 
 ### File outputs:
+The first initial for each png indicates left(l) or right(r) and the second initial for the type of walk: standard(s), limp(l), waddle(w), drag(d) 
+
+Output folder contains butterworth_filter and loess_smooth folders, as well as acceleration, velocity and position graphs for each walking type and a numerical integration test graph
+
+Butterworth_filter and loess_smooth folders contain graphs of raw acceleration data vs noise filtered acceleration data
+
+In the console progression updates and an output of p-values from the mann-whitney u test between the left leg and right leg for the same walking types
 
 ## Interpreting the Data
 Phone is attached to the ankle facing outwards (add pic?)
@@ -28,9 +36,9 @@ z: leg moving side to side
 
 - [x] transform acceleration to velocity to position (Δv = a⋅Δt and Δp = v⋅Δt.)
 
-- [  ] check normality/variance 
+- [x] check normality/variance (of the acceleration data)
 
-- [  ] statistical test to see if datasets differ (anova, u-test, t-test)
+- [x] statistical test to see if datasets differ (mann-whitney u)
 
 - [  ] compare different steps
 

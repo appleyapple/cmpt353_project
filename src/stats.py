@@ -3,8 +3,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal.filter_design import butter
-import scipy.stats as stats
+import statsmodels.api as sm
 from scipy import signal
+from scipy import stats
 from scipy.fft import fft, fftfreq, fftshift
 import matplotlib as mpl
 from . import data_processing as data
@@ -14,7 +15,7 @@ from . import data_processing as data
 d = np.array(data.butter_ls['x'])
 fft = fft(d)
 freq = fftshift(fftfreq(d.shape[-1]))
-print(fft)
+#print(fft)
 
 # https://www.ritchievink.com/blog/2017/04/23/understanding-the-fourier-transform-by-example/
 T = data.butter_ls['time'][1] - data.butter_ls['time'][0]
@@ -26,6 +27,17 @@ plt.xlabel("Frequency [Hz]")
 plt.bar(f[:N // 2], np.abs(fft)[:N // 2] * 1 / N, width=1.5)
 # plt.show()
 
+# attempt to transforming the data to normal distribution
+plt.title('standard x-axis acceleration histogram untransformed and transformed')
+plt.hist(data.butter_ls['x'])
+plt.hist(np.sqrt(data.butter_ls['x']+1))
+plt.hist(np.log(data.butter_ls['x']+1))
+plt.legend(['Untransformed', 'Square-root Transformed','Log Transformed'])
+plt.xlabel('Acceleration')
+plt.ylabel('Count ')
+#plt.show()
+
+#given how there are negative values, square-root and logarithms wouldn't work so tried shifting values, but the shift overwhelms the original values so any statistical tests requiring normality cannot be done
 
 # stats testing all the left leg data against right leg using Mann-Whitney Test since they are non-normal datasets
 print("\nMann-Whitney Test For:\n")
@@ -87,4 +99,6 @@ print("Waddle: " + str(stats.mannwhitneyu(data.butter_lw['z_position'],data.butt
 print("Limp: " + str(stats.mannwhitneyu(data.butter_ll['z_position'],data.butter_rl['z_position']).pvalue)+"\n")
 
 # conclusion from stats test is that  they are too sensitive to changes in data, so ML is probably more suited at discerning the differences in leg movement types
-# ill try transforming the data to see if the results will differ
+
+
+
